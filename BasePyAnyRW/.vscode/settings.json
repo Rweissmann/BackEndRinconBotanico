@@ -1,0 +1,11 @@
+{
+    "files.autoSave": "onWindowChange",
+    "editor.fontSize": 12,
+    "files.associations": {
+        ".py": ""
+    },
+    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+    "editor.columnSelection": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true
+}

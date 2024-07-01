@@ -1,0 +1,40 @@
+[
+    {
+        "_id": "a309433c-ec7c-4371-82a7-de645d702cfd",
+        "colId": "history",
+        "containerId": "",
+        "name": "127.0.01:5000/plantas?Categoria=2&CategoriaDescripcion=\"Exterior\"&Estado=\"A\"&PlantasNombre=\"Begonia\"&Proceso=\"P\"&idPlantas=1007",
+        "url": "//127.0.01:5000/mensajes/1",
+        "method": "POST",
+        "sortNum": 0,
+        "created": "2024-06-23T22:28:26.939Z",
+        "modified": "2024-06-23T22:50:42.381Z",
+        "headers": [
+            {
+                "name": "idPlantas",
+                "value": "1007"
+            },
+            {
+                "name": "Accept",
+                "value": "*/*",
+                "isDisabled": true
+            }
+        ],
+        "body": {
+            "type": "graphql",
+            "raw": "",
+            "form": [],
+            "graphql": {
+                "query": "{\n  \"Archivo\": null,\n  \"Area\": \"Cursos\",\n  \"Celular\": \"+5491137619533\",\n  \"CodigoArea\": null,\n  \"Direccion\": \"Guemes 3490 4to 13\",\n  \"Email\": \"rweissmann@gmail.com\",\n  \"Estado\": \"I\",\n  \"Mensaje\": \"Reitero blablablabla\",\n  \"NombreYApellido\": \"Raul Weissmann\",\n  \"Proceso\": \"N\"\n}"
+            }
+        },
+        "tests": [
+            {
+                "type": "set-env-var",
+                "custom": "2",
+                "action": "equal",
+                "value": "{{idContacto}}"
+            }
+        ]
+    }
+]

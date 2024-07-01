@@ -1,0 +1,393 @@
+from flask import Flask ,jsonify ,request
+# del modulo flask importar la clase Flask y los métodos jsonify,request
+from flask_cors import CORS       # del modulo flask_cors importar CORS
+from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
+app=Flask(__name__)  # crear el objeto app de la clase Flask
+CORS(app) # modulo cors es para que me permita acceder desde el frontend al backend
+
+# configuro la base de datos, con el nombre el usuario y la clave
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:RWei10336#$@localhost/proyectobackendrinconbotanico'
+# URI de la BBDD                          driver de la BD  user:clave@URLBBDD/nombreBBDD
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False #none
+db= SQLAlchemy(app)   #crea el objeto db de la clase SQLAlquemy
+ma=Marshmallow(app)   #crea el objeto ma de de la clase Marshmallow
+
+# defino las tablas
+class plantas (db.Model):   # la clase Plantas hereda de db.Model de SQLAlquemy   
+    idPlantas=db.Column(db.Integer, primary_key=True)   #define los campos de la tabla
+    Nombre=db.Column(db.String(200))
+    Categoria=db.Column(db.Integer)
+    CategoriaDescripcion=db.Column(db.String(100))
+    Estado=db.Column(db.String(1))
+    Proceso=db.Column(db.String(1))
+    def __init__(self, idPlantas, Nombre, Categoria, CategoriaDescripcion, Estado, Proceso):
+        self.idPlantas=idPlantas # No es autoincremento
+        self.Nombre=Nombre
+        self.Categoria=Categoria
+        self.CategoriaDescripcion=CategoriaDescripcion
+        self.Estado=Estado
+        self.Proceso=Proceso
+        
+class dataplantas (db.Model): 
+    idPlantas=db.Column(db.Integer, primary_key=True)   #define los campos de la tabla no es autoincremento
+    Ubicacion=db.Column(db.String(200))
+    Sustrato=db.Column(db.String(200))
+    Riego=db.Column(db.String(200))
+    Floracion=db.Column(db.String(200))
+    Tamano=db.Column(db.String(200))
+    Observaciones=db.Column(db.String(1200))
+    Estado=db.Column(db.String(1))
+    Proceso=db.Column(db.String(1))
+    def __init__(self, idPlantas, Ubicacion, Sustrato, Riego, Floracion, Tamano, Observaciones, Estado, Proceso):
+        self.idPlantas=idPlantas 
+        self.Ubicacion=Ubicacion
+        self.Sustrato=Sustrato
+        self.Riego=Riego
+        self.Floracion=Floracion
+        self.Tamano=Tamano
+        self.Observaciones=Observaciones
+        self.Estado=Estado
+        self.Proceso=Proceso
+
+class imagenes (db.Model):   
+    idPlantas=db.Column(db.Integer, primary_key=True)  
+    ImagenLinkFoto=db.Column(db.String(200))
+    Estado=db.Column(db.String(1))
+    Proceso=db.Column(db.String(1))
+    def __init__(self, idPlantas, ImagenLinkFoto, Estado, Proceso): #crea el  constructor de la clase
+        self.idPlantas=idPlantas # no hace falta el id porque lo crea sola mysql por ser auto_incremento
+        self.ImagenLinkFoto=ImagenLinkFoto
+        self.Estado=Estado
+        self.Proceso=Proceso
+
+class usuarios (db.Model):  # la clase Producto hereda de db.Model de SQLAlquemy   
+    idUsuarios=db.Column(db.Integer, primary_key=True)   #define los campos de la tabla
+    NombreYApellido=db.Column(db.String(100))
+    Email=db.Column(db.String(200))
+    Clave=db.Column(db.String(50))
+    RolDba=db.Column(db.String(6))
+    Ciudad=db.Column(db.String(100))
+    Provincia=db.Column(db.String(100))
+    Pais=db.Column(db.String(100))
+    Estado=db.Column(db.String(1))
+    Proceso=db.Column(db.String(1))  
+    def __init__(self, idUsuarios, NombreYApellido, Email, Clave, RolDba, Ciudad, Provincia, Pais, Estado, Proceso): #crea el  constructor de la clase
+        self.idUsuarios=idUsuarios # no hace falta el id porque lo crea sola mysql por ser auto_incremento
+        self.NombreYApellido=NombreYApellido
+        self.Email=Email
+        self.Clave=Clave
+        self.RolDba=RolDba
+        self.Ciudad=Ciudad
+        self.Provincia=Provincia
+        self.Pais=Pais
+        self.Estado=Estado
+        self.Proceso=Proceso
+
+class mensajes (db.Model):  
+    idMensajes=db.Column(db.Integer, primary_key=True)
+    NombreYApellido=db.Column(db.String(60))
+    Email=db.Column(db.String(200))
+    Direccion=db.Column(db.String(200))
+    Celular=db.Column(db.String(16))
+    CodigoArea=db.Column(db.String(100))
+    Area=db.Column(db.String(100))
+    Mensaje=db.Column(db.String(1200))
+    Archivo=db.Column(db.String(50000))
+    Estado=db.Column(db.String(1))
+    Proceso=db.Column(db.String(1))
+    def __init__(self, idMensajes, NombreYApellido, Email, Direccion, Celular, CodigoArea, Area, Mensaje, Archivo, Estado, Proceso): #crea el  constructor de la clase
+        self.idMensajes=idMensajes # no hace falta el id porque lo crea sola mysql por ser auto_incremento
+        self.NombreYApellido=NombreYApellido
+        self.Email=Email
+        self.Direccion=Direccion
+        self.Celular=Celular
+        self.CodigoArea=CodigoArea
+        self.Area=Area
+        self.Mensaje=Mensaje
+        self.Archivo=Archivo
+        self.Estado=Estado
+        self.Proceso=Proceso
+
+class listadecontactossuscriptos (db.Model):  
+    Emails=db.Column(db.String(200))
+    def __init__(self, Emails): #crea el  constructor de la clase
+        self.Emails=Emails 
+
+with app.app_context():
+    db.create_all()  # aqui crea todas las tablas si es que no estan creadas
+
+class plantasSchema(ma.Schema):
+    class Meta:
+        fields=('idPlantas','Nombre', 'Categoria', 'Categoria', 'Estado', 'Proceso')
+planta_schema=plantasSchema()  # El objeto producto_schema es para traer un producto
+plantas_schema=plantasSchema(many=True)  # El objeto productos_schema es para traer multiples registros de producto
+
+class dataplantasSchema(ma.Schema):
+    class Meta:
+        fields=('idPlantas','Ubicacion', 'Sustrato', 'Riego','Floracion', 'Tamano', 'Observaciones', 'Estado', 'Proceso')
+dataplanta_schema=dataplantasSchema()  # El objeto producto_schema es para traer un producto
+dataplantas_schema=dataplantasSchema(many=True)  # El objeto productos_schema es para traer multiples registros de producto
+
+class imagenesSchema(ma.Schema):
+    class Meta:
+        fields=('idPlantas','ImagenLinkFoto', 'Estado', 'Proceso')
+imagen_schema=imagenesSchema()  # El objeto producto_schema es para traer un producto
+imagenes_schema=imagenesSchema(many=True)  # El objeto productos_schema es para traer multiples registros de producto
+
+class usuariosSchema(ma.Schema):
+    class Meta:
+        fields=('idUsuarios','NombreYApellido', 'Email', 'Clave', 'RolDba', 'Ciudad', 'Provincia', 'Pais', 'Estado', 'Proceso')
+usuario_schema=usuariosSchema()  # El objeto producto_schema es para traer un producto
+usuarios_schema=usuariosSchema(many=True)  # El objeto productos_schema es para traer multiples 
+
+class mensajesSchema(ma.Schema):
+    class Meta:
+        fields=('idMensajes','NombreYApellido', 'Email', 'Direccion', 'Celular', 'CodigoArea', 'Area', 'Mensaje', 'Archivo', 'Estado', 'Proceso')
+mensaje_schema=mensajesSchema()  # El objeto producto_schema es para traer un producto
+Mensajes_schema=mensajesSchema(many=True)  # El objeto productos_schema es para traer multiples 
+
+class listadecontactossuscriptosSchema(ma.Schema):
+    class Meta:
+        fields=('Emails')
+contactosuscripto_schema=listadecontactossuscriptosSchema()  # El objeto producto_schema es para traer un producto
+contactossuscriptos_schema=listadecontactossuscriptosSchema(many=True)  # El objeto productos_schema es para traer multiples 
+
+# crea los endpoint o rutas (json)
+# Metodos Get
+@app.route('/plantas',methods=['GET'])
+def get_Plantas():
+    all_plantas=plantas.query.all() # el metodo query.all() lo hereda de db.Model
+    result=plantas_schema.dump(all_plantas)  #el metodo dump() lo hereda de ma.schema y
+                                                 # trae todos los registros de la tabla
+    return jsonify(result)     # retorna un JSON de todos los registros de la tabla
+
+@app.route('/plantas/<id>',methods=['GET'])
+def get_Plantas(idPlantas):
+    planta=plantas.query.get(idPlantas)
+    return plantas_schema.jsonify(plantas)   # retorna el JSON de un producto recibido como parametro
+
+@app.route('/dataplantas',methods=['GET'])
+def get_dataplantas():
+    all_dataplantas=dataplantas.query.all() # el metodo query.all() lo hereda de db.Model
+    result=dataplantas_schema.dump(all_dataplantas)  #el metodo dump() lo hereda de ma.schema y
+                                                 # trae todos los registros de la tabla
+    return jsonify(result)     # retorna un JSON de todos los registros de la tabla
+
+@app.route('/dataplantas/<id>',methods=['GET'])
+def get_dataplanta(idPlantas):
+    dataplanta=dataplanta.query.get(idPlantas)
+    return dataplanta_schema.jsonify(dataplantas)   # retorna el JSON de un producto recibido como parametro
+
+@app.route('/imagenes',methods=['GET'])
+def get_imagenes():
+    all_imagenes=imagenes.query.all() # el metodo query.all() lo hereda de db.Model
+    result=imagenes_schema.dump(all_imagenes)  #el metodo dump() lo hereda de ma.schema y
+                                                 # trae todos los registros de la tabla
+    return jsonify(result)     # retorna un JSON de todos los registros de la tabla
+
+@app.route('/imagenes/<id>',methods=['GET'])
+def get_imagen(idPlantas):
+    imagen=imagen.query.get(idPlantas)
+    return imagen_schema.jsonify(imagen)   # retorna el JSON de un producto recibido como parametro
+
+@app.route('/listadecontactossuscriptos',methods=['GET'])
+def get_contactossuscriptos():
+    all_contactossuscriptos=listadecontactossuscriptos.query.all() # el metodo query.all() lo hereda de db.Model
+    result=contactossuscriptos_schema.dump(all_contactossuscriptos)  #el metodo dump() lo hereda de ma.schema y trae todos los registros de la tabla
+    return jsonify(result)     # retorna un JSON de todos los registros de la tabla
+
+@app.route('/listadecontactossuscriptos/<id>',methods=['GET'])
+def get_contactosuscripto(Emails):
+    contactosuscripto=listadecontactossuscriptos.query.get(Emails)
+    return contactosuscripto_schema.jsonify(contactosuscripto)   # retorna el JSON de un producto recibido como parametro
+
+@app.route('/usuarios',methods=['GET'])
+def get_Usuarios():
+    all_usuarios=usuarios.query.all() # el metodo query.all() lo hereda de db.Model
+    result=usuarios_schema.dump(all_usuarios)  #el metodo dump() lo hereda de ma.schema y
+                                                 # trae todos los registros de la tabla
+    return jsonify(result)     # retorna un JSON de todos los registros de la tabla
+
+@app.route('/usuarios/<id>',methods=['GET'])
+def get_usuario(id):
+    usuario=usuarios.query.get(id)
+    return usuario_schema.jsonify(usuario)   # retorna el JSON de un usuario recibido como parametro
+
+#Metodos Delete
+@app.route('/plantas/<id>',methods=['DELETE'])
+def delete_planta(idPlantas):
+    planta=plantas.query.get(idPlantas)
+    db.session.delete(plantas)
+    db.session.commit()                     # confirma el delete
+    return planta_schema.jsonify(planta) # me devuelve un json con el registro eliminado
+
+@app.route('/dataplantas/<id>',methods=['DELETE'])
+def delete_dataplantas(idPlantas):
+    dataplanta=dataplantas.query.get(idPlantas)
+    db.session.delete(dataplanta)
+    db.session.commit()                     # confirma el delete
+    return dataplanta_schema.jsonify(dataplanta) # me devuelve un json con el registro eliminado
+
+@app.route('/imagenes/<id>',methods=['DELETE'])
+def delete_imagen(idPlantas):
+    imagen=imagen.query.get(idPlantas)
+    db.session.delete(imagen)
+    db.session.commit()                     # confirma el delete
+    return imagen_schema.jsonify(imagen) # me devuelve un json con el registro eliminado
+
+@app.route('/mensajes/<id>',methods=['DELETE'])
+def delete_mensaje(idMensajes):
+    mensaje=mensaje.query.get(idMensajes)
+    db.session.delete(mensaje)
+    db.session.commit()                     # confirma el delete
+    return mensaje_schema.jsonify(mensaje) # me devuelve un json con el registro eliminado
+
+@app.route('/listadecontactossuscriptos/<id>',methods=['DELETE'])
+def delete_contactosuscripto(Emails):
+    contactosuscripto=listadecontactossuscriptos.query.get(Emails)
+    db.session.delete(contactosuscripto)
+    db.session.commit()                     # confirma el delete
+    return contactosuscripto_schema.jsonify(contactosuscripto) # me devuelve un json con el registro eliminado
+
+@app.route('/usuarios/<id>',methods=['DELETE'])
+def delete_usuario(idUsuarios):
+    usuario=usuario.query.get(id)
+    db.session.delete(usuario)
+    db.session.commit()                     # confirma el delete
+    return usuario_schema.jsonify(usuario) # me devuelve un json con el registro eliminado
+
+#Metodos Post 
+#PlantasSchema_fields=('idPlantas','Nombre', 'Categorias', 'CategoriasDescripcion', 'Estado', 'Proceso')
+@app.route('/plantas', methods=['POST']) # crea ruta o endpoint
+def create_plantas():
+    #print(request.json)  # request.json contiene el json que envio el cliente
+    idPlantas=request.json['idPlantas']
+    Nombre=request.json['Nombre']
+    Categorias=request.json['Categorias']
+    CategoriasDescripcion=request.json['CategoriasDescripcion']
+    Estado="A"
+    Proceso="P"
+    
+    new_planta=plantas(idPlantas, Nombre, Categorias, CategoriasDescripcion, Estado, Proceso)
+    db.session.add(new_planta)
+    db.session.commit() # confirma el alta
+    return plantas_schema.jsonify(new_planta)
+
+# DataPlantasSchema_fields=('idPlantas','Ubicacion', 'Sustrato', 'Riego','Floracion', 'Tamano', 'Observaciones', 'Estado', 'Proceso')
+@app.route('/dataplantas', methods=['POST']) # crea ruta o endpoint
+def create_dataplanta():
+        #print(request.json)  # request.json contiene el json que envio el cliente
+        idPlantas=request.json['idPlantas']
+        Ubicacion=request.json['Ubicacion']
+        Sustrato=request.json['Sustrato']
+        Riego=request.json['Riego']
+        Floracion=request.json['Floracion']
+        Tamano=request.json['Tamano']
+        Observaciones=request.json['Observaciones']
+        Estado="A"
+        Proceso="P"
+
+        new_dataplanta=dataplantas(idPlantas, Ubicacion, Sustrato, Riego, Floracion, Tamano, Observaciones, Estado, Proceso)
+        db.session.add(new_dataplanta)
+        db.session.commit() # confirma el alta
+        return dataplanta_schema.jsonify(new_dataplanta)
+
+# ImagenesSchema_fields=('idPlantas','ImagenLinkFoto', 'Estado', 'Proceso')
+@app.route('/imagenes/<id>', methods=['POST']) # crea ruta o endpoint
+def create_imagenes():
+        #print(request.json)  # request.json contiene el json que envio el cliente
+        idPlantas=request.json['idPlantas']
+        ImagenLinkFoto=request.json['ImagenLinkFoto']
+        Estado="A"
+        Proceso="P"
+    
+        new_imagen=imagenes(idPlantas, ImagenLinkFoto, Estado, Proceso)
+        db.session.add(new_imagen)
+        db.session.commit() # confirma el alta
+        return imagenes_schema.jsonify(new_imagen)
+
+# UsuariosSchema_fields=('idUsuarios','NombreYApellido', 'Email', 'Clave', 'RolDba', 'Ciudad', 'Provincia', 'Pais', 'Estado', 'Proceso')
+@app.route('/usuarios/<id>', methods=['POST']) # crea ruta o endpoint
+def create_usuario():
+        #print(request.json)  # request.json contiene el json que envio el cliente
+        idUsuarios=request.json['idUsuarios']
+        NombreYApellido=request.json['NombreYApellido']
+        Email=request.json['Email']
+        Clave=request.json['Clave']
+        RolDba=request.json['RolDba']
+        Ciudad=request.json['Ciudad']
+        Provincia=request.json['Provincia']
+        Pais=request.json['Pais']
+        Estado="A"
+        Proceso="P"
+        
+        new_usuario=usuarios(idUsuarios, NombreYApellido, Email, Clave, RolDba, Ciudad, Provincia, Pais, Estado, Proceso)
+        db.session.add(new_usuario)
+        db.session.commit() # confirma el alta
+        return usuarios_schema.jsonify(new_usuario)
+
+# Metodos PUT Hasta aqui llegue
+##PlantasSchema_fields=('idPlantas','Nombre', 'Categorias', 'CategoriasDescripcion', 'Estado', 'Proceso')
+@app.route('/plantas/<id>' ,methods=['PUT'])
+def update_planta(idPlantas):
+    planta=planta.query.get(idPlantas)
+
+    planta.Nombre=request.json['Nombre']
+    planta.Categoria=request.json['Categorias']
+    planta.CategoriaDescripcion=request.json['CategoriasDescripcion']
+    planta.Estado="A"
+    planta.Proceso="P"
+
+    db.session.commit()    # confirma el cambio
+    return planta_schema.jsonify(plantas)  
+
+# DataPlantasSchema_fields=('idPlantas','Ubicacion', 'Sustrato', 'Riego','Floracion', 'Tamano', 'Observaciones', 'Estado', 'Proceso')
+@app.route('/dataplantas/<id>' ,methods=['PUT'])
+def update_dataplantas(idPlantas):
+    dataplanta=dataplantas.query.get(idPlantas)
+    dataplanta.Ubicacion=request.json['Ubicacion']
+    dataplanta.Sustrato=request.json['Sustrato']
+    dataplanta.Riego=request.json['Riego']
+    dataplanta.Floracion=request.json['Floracion']
+    dataplanta.Tamano=request.json['Tamano']
+    dataplanta.Observaciones=request.json['Observaciones']
+    dataplanta.Estado="A"
+    dataplanta.Proceso="P"
+
+    db.session.commit()    # confirma el cambio
+    return dataplanta_schema.jsonify(dataplanta)    # 
+
+# ImagenesSchema_fields=('idPlantas','ImagenLinkFoto', 'Estado', 'Proceso')
+@app.route('/imagenes/<id>' ,methods=['PUT'])
+def update_imagenes(idPlantas):
+    imagen=imagen.query.get(idPlantas) 
+    imagen.ImagenLinkFoto=request.json['ImagenLinkFoto']
+    imagen.Estado="A"
+    imagen.Proceso="P"
+
+    db.session.commit()    # confirma el cambio
+    return imagen_schema.jsonify(imagen)    # y retorna un json con el producto
+
+# UsuariosSchema_fields=('idUsuarios','NombreYApellido', 'Email', 'Clave', 'RolDba', 'Ciudad', 'Provincia', 'Pais', 'Estado', 'Proceso')
+@app.route('/usuarios/<id>' ,methods=['PUT'])
+def update_usuarios(idUsuarios):
+    usuario=usuarios.query.get(idUsuarios)
+ 
+    usuario.NombreYApellido=request.json['NombreYApellido']
+    usuario.Email=request.json['Email']
+    usuario.Clave=request.json['Clave']
+    usuario.RolDba=request.json['RolDba']
+    usuario.Ciudad=request.json['Ciudad']
+    usuario.Provincia=request.json['Provincia']
+    usuario.Pais=request.json['Pais']
+    usuario.Estado="A"
+    usuario.Proceso="P"
+
+    db.session.commit()    # confirma el cambio
+    return usuario_schema.jsonify(usuario)    # y retorna un json con el producto
+
+# programa principal *******************************
+if __name__=='__main__':  
+    app.run(debug=True, port=5000)   # ejecuta el servidor Flask en el puerto 5000
+

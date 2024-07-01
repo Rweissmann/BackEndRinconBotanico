@@ -1,0 +1,21 @@
+use rweissmann1$default;
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (1, "Azucenita de Bañado", 1, "Acuaticas", "A", "P");
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (2, "Achira Amarilla", 1, "Acuaticas", "A", "P");
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (3, "Rosa de Rio", 1, "Acuaticas", "A", "P");
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (4, "Aguape", 1, "Acuaticas", "A", "P");
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (5, "Margarita del Bañado", 1, "Acuaticas", "A", "P");
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (6, "Saeta", 1, "Acuaticas", "A", "P");
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (1001, "Chinita del Campo", 2, "Exterior", "A", "P");
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (1002, "Margarita del Campo", 2, "Exterior", "A", "P");
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (1003, "Verbena de Buenos Aires", 2, "Exterior", "A", "P");
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (1004, "Ceibo", 2, "Exterior", "A", "P");
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (1005, "Fumo Bravo", 2, "Exterior", "A", "P");
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (1006, "Maracuya", 2, "Exterior", "A", "P");
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (2001, "Croton", 3, "Interior", "A", "P");
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (2002, "Estrella Federal", 3, "Interior", "A", "P");
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (2003, "Fitonia", 3, "Interior", "A", "P");
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (2004, "Helecho", 3, "Interior", "A", "P");
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (2005, "Potus", 3, "Interior", "A", "P");
+INSERT INTO plantas (idPlantas, PlantasNombre, Categoria, CategoriaDescripcion, Estado, Proceso) VALUES (2006, "Sigonium", 3, "Interior", "A", "P");
+
+SELECT * FROM plantas;
