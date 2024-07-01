@@ -81,39 +81,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
     
-    //API// exteriores.html llamando a la api desde js.
 
-    new Vue({
-        el: '#app',
-        data: {
-            mostrarLista: true,
-            plantas: []
-        },
-        created() {
-            this.fetchPlantData();
-        },
-        methods: {
-            async fetchPlantData() {
-                try {
-                    const response = await fetch('https://joxcastro.github.io/listaPlantasApi/categoria/planta-exterior.json');
-                    const data = await response.json();
-                    this.plantas = data;
-                    // Filtrar elementos específicos
-                    const specificIndices = [0,1, 2, 8, 9, 10]; // Índices de los elementos que queremos mostrar (1, 2, 4, 5,7 en base 0)
-                    this.plantas = specificIndices.map(index => data[index]);
-                } catch (error) {
-                    console.error('Error al obtener los datos de la API:', error);
-                    this.mostrarLista = false;
-                }
-            }
-        }
-    });
-
-
-    document.addEventListener('DOMContentLoaded', function () {
-        // Llamar a la función para obtener datos de la API se maneja en main.js con Vue.js
-
-    });
 
 });
 

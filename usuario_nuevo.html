@@ -36,7 +36,8 @@
                 </div>
                 <div class="mb-3">
                     <label for="clave">Clave:</label><br>
-                    <input type="password" name="clave" id="clave" v-model="clave">
+                    <input type="password" value="FakePSW" name="clave" id="myInput" v-model="clave" placeholder="Ingrese clave">
+                    <input type="checkbox" onclick="myFunction()"> Mostrar clave
                 </div>
                 <div class="mb-3">
                     <label for="rol">Categoría: </label><br>
@@ -62,6 +63,7 @@
     <script src="./js/main.js"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="./js/usuarios.js"></script>
+    
 </body>
 
 </html>

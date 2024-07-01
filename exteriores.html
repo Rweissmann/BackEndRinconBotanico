@@ -32,12 +32,23 @@
                         <li class="breadcrumb-item active" aria-current="page">Plantas de Exterior</li>
                     </ul>
                 </nav>
-                <h1>Plantas de exterior</h1>
-                <div class="d-flex">
-                   <div v-for="planta in plantas" :key="planta.id" class="card">
-                        <p><img :src="planta.img" :alt="planta.nomPlant"></p>
-                        <h5>{{ planta.nomPlant }}</h5>
-                        <p>{{ planta.desc }}</p>
+                <h1>Plantas de Exterior</h1>
+                <div class="d-flex flex-wrap">
+                   <div v-for="planta in plantas" :key="planta.id" class="card m-2" style="width: 28rem;">
+                        <img :src="planta.imagen" :alt="planta.nombre" class="card-img-top" height="250px;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ planta.nombre }}</h5>
+                            <p class="card-text description" v-if="!planta.showFullDesc">{{ planta.descripcion }}</p>
+                            <p class="card-text" v-if="planta.showFullDesc">{{ planta.descripcion }}</p>
+                            <span class="show-more" @click="toggleDescription(planta)">
+                                {{ planta.showFullDesc ? 'Mostrar menos' : 'Mostrar más' }}
+                            </span>
+                            <p class="card-text"><strong>Floración:</strong> {{ planta.floracion }}</p>
+                            <p class="card-text"><strong>Riego:</strong> {{ planta.riego }}</p>
+                            <p class="card-text"><strong>Sustrato:</strong> {{ planta.sustrato }}</p>
+                            <p class="card-text"><strong>Tamaño:</strong> {{ planta.tamano }}</p>
+                            <p class="card-text"><strong>Ubicación:</strong> {{ planta.ubicacion }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -53,6 +64,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="./js/script.js"></script>
+    <script src="js/api-exteriores.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>

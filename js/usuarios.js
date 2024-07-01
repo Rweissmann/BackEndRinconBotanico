@@ -67,3 +67,14 @@ const { createApp } = Vue
         this.fetchData(this.url)
     },
   }).mount('#app')
+
+  /********************** */
+  function myFunction() {
+    var x = document.getElementById("myInput");
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+  }
+  /***************************** */
